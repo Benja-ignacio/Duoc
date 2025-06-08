@@ -1,0 +1,3 @@
+# PROGRAMA QUE PIDE 5 NUMEROS Y IMPRIME LA LISTA EN ORDEN INVERSO
+
+userinput = input("Ingrese 5 numeros: ")
