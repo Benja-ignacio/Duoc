@@ -53,21 +53,21 @@ def validar_estado(mensaje):
 
 def mostrar_peliculas():
     for i in datos_peliculas["peliculas"]:
-        print(f"Titulo: {i["titulo"]}")
-        print(f"Año: {i["año"]}")
-        print(f"Genero: {i["genero"]}")
-        print(f"Estado: {i["estado"]}\n")
+        print(f"'Titulo: {i['titulo']}")
+        print(f"Año: {i['año']}")
+        print(f"Genero: {i['genero']}")
+        print(f"Estado: {i['estado']}\n")
 
 def buscar_pelicula(mensaje):
-    encontrado = None
     while True:
         buscar_pelicula = input(mensaje).capitalize()
+        encontrado = False
         for i in datos_peliculas["peliculas"]:
             if i["titulo"] == buscar_pelicula:
-                print(f"Titulo: {i["titulo"]}")
-                print(f"Año: {i["año"]}")
-                print(f"Genero: {i["genero"]}")
-                print(f"Estado: {i["estado"]}\n")
+                print(f"Titulo: {i['titulo']}")
+                print(f"Año: {i['año']}")
+                print(f"Genero: {i['genero']}")
+                print(f"Estado: {i['estado']}\n")
                 encontrado = True
         if encontrado == True:
             break
@@ -75,20 +75,17 @@ def buscar_pelicula(mensaje):
             print("El titulo ingresado no coincide con ninguna pelicula.")
             continue
 
-def eliminar_pelicula(mensaje:int):
-    encontrado = None
+def eliminar_pelicula(mensaje):
     while True:
-        try:
-            eliminar_pelicula = validar_entero(mensaje, minimo=0)
-        except ValueError:
-            print("Debes ingresar un numero entero mayor o igual a 0")
-            continue    
+        encontrado = False
+        eliminar_pelicula = validar_entero(mensaje, minimo=0)
         for i in datos_peliculas["peliculas"]:
             if i["id"] == eliminar_pelicula:
                 datos_peliculas["peliculas"].remove(i)
                 print("la pelicula ha sido eliminada correctamente.\nVolviendo al menu principal...")
                 pausa(1.5)
                 encontrado = True
+                break
         if encontrado == True:
             break
         else:
@@ -96,57 +93,72 @@ def eliminar_pelicula(mensaje:int):
             continue
 
 
-def validar_id():
+def validar_si_existen_datos():
     while True:
         if len(datos_peliculas["peliculas"]) == 0:
             print("No hay registros de peliculas ingresados.\nVolviendo al menu principal...")
             pausa(1)
             return False
         return True
+    
 
 def validar_pelicula():
-        id_pelicula = validar_entero("Ingrese el id de la pelicula: ", minimo=0)
-        titulo_pelicula = validar_string("Ingrese el titulo de la pelicula: ")
-        anio_pelicula = validar_entero("Ingrese el año de la pelicula: ", minimo=1800, maximo=2025)
-        genero_pelicula = validar_string("Ingrese el genero de la pelicula: ")
-        estado_pelicula = validar_estado("Ingrese el estado de la pelicula (vista / no vista): ")
+        while True:
+            id_pelicula = validar_entero("Ingrese el id de la pelicula: ", minimo=0,)
+            if any(pelicula["id"] == id_pelicula for pelicula in datos_peliculas["peliculas"]):
+                print("El ID ingresado ya esta en uso")
+                continue
+            break
+        while True:
+            titulo_pelicula = validar_string("Ingrese el titulo de la pelicula: ")
+            if any(pelicula["titulo"] == titulo_pelicula for pelicula in datos_peliculas["peliculas"]):
+                print("El titulo ya se encuentra ingresado.")
+                continue
+            anio_pelicula = validar_entero("Ingrese el año de la pelicula: ", minimo=1800, maximo=2025)
+            genero_pelicula = validar_string("Ingrese el genero de la pelicula: ")
+            estado_pelicula = validar_estado("Ingrese el estado de la pelicula (vista / no vista): ")
 
-        agregar_pelicula = {
-            "id":id_pelicula,
-            "titulo":titulo_pelicula,
-            "año":anio_pelicula,
-            "genero":genero_pelicula,
-            "estado":estado_pelicula
-        }
-        
-        datos_peliculas["peliculas"].append(agregar_pelicula)
-        print("Pelicula agregada!")
-        pausa(1.5)
+            agregar_pelicula = {
+                "id":id_pelicula,
+                "titulo":titulo_pelicula,
+                "año":anio_pelicula,
+                "genero":genero_pelicula,
+                "estado":estado_pelicula
+            }
+            
+            datos_peliculas["peliculas"].append(agregar_pelicula)
+            print("Pelicula agregada!")
+            pausa(1.5)
+            break
 
 
 while True:
     print("*****Menu*****")
-    opcion = int(input("1) Agregar una pelicula\n2) Mostrar todas las peliculas\n3) Buscar una pelicula por su titulo\n4) Eliminar una pelicula\n5) Salir\n: "))
+    try:
+        opcion = int(input("1) Agregar una pelicula\n2) Mostrar todas las peliculas\n3) Buscar una pelicula por su titulo\n4) Eliminar una pelicula\n5) Salir\n: "))
+    except ValueError:
+        print("Debes ingresar una opcion valida. (1-5)")
+        continue
 
     if opcion == 1:
         validar_pelicula()
 
     
     elif opcion == 2:
-        if not validar_id():
+        if not validar_si_existen_datos():
             continue
         mostrar_peliculas()
         input("Presione enter para volver al menu principal...")
     
     elif opcion == 3:
-        if not validar_id():
+        if not validar_si_existen_datos():
             continue
         buscar_pelicula("Ingrese el titulo de la pelicula : ")
         input("Presione enter para volver al menu principal...")
 
     
     elif opcion == 4:
-        if not validar_id():
+        if not validar_si_existen_datos():
             continue
         eliminar_pelicula("Ingrese el id de la pelicula a eliminar: ")
     
