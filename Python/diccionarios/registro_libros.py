@@ -1,6 +1,6 @@
 import sys
-sys.path.append("/home/benjamin/Documents/duoc/Python/funciones")
-from clear import clear
+sys.path.append("/home/benjamin/Documents/duoc/Python")
+from funciones import validacion
 from time import sleep as sp
 # Registro de libros en una biblioteca 
 
@@ -17,7 +17,6 @@ datos_biblioteca = {
     "libros":[
     ]
 }
-clear()
 print(   " Bienvenido al registro de libros.")
 while True:
     clear()
