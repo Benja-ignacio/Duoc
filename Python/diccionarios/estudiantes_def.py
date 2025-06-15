@@ -1,7 +1,122 @@
-import sys
-from time import sleep as sp
-sys.path.append("C:/Users/Admin/Documents/Duoc/Duoc/Python/")
-from funciones import validaciones
+from time import sleep as pausa
+
+def validar_entero(mensaje, minimo=None, maximo=None):
+    while True:
+        try:
+            entero = int(input(mensaje))
+        except ValueError:
+            print("Valor ingresado invalido. Debes ingresar un numero entero.")
+            continue
+
+        if minimo is not None and maximo is not None:
+            if not minimo < entero < maximo:
+                print(f"Debes ingresar un numero dentro del rango permitido. ({minimo},{maximo})")
+                continue
+
+        
+        elif minimo is not None:
+            if entero < minimo:
+                print(f"Debes ingresar un numero entero dentro del rango permitido. ({minimo} - infinito)")
+                continue
+        
+        elif maximo is not None:
+            if entero > maximo:
+                print(f"Debes ingresar un numero menor o igual al maximo. (maximo:{maximo})")
+                continue
+        return entero
+
+def validar_string(mensaje):
+    while True:
+        string = input(mensaje).strip().capitalize()
+        caracteres_permitidos = "abcdefghijklmnopqrstuvwxyzñáéíóúüABCDEFGHIJKLMNOPQRSTUVWXYZÑÁÉÍÓÚÜ0123456789 :@"
+        for i in string:
+            if i not in caracteres_permitidos:
+                print("Solo puedes ingresar numeros y letras.")
+                break
+        if not 3 < len(string) < 48:
+            print("Debe estar dentro del rango de los caracteres permitidos. (3-48)")
+            continue
+        return string
+
+def listar_estudiantes():
+    while True:
+        for i in datos_estudiantes["estudiantes"]:
+            print(f"ID: {i["id"]}")
+            print(f"Nombre: {i['nombre']}")
+            print(f"Apellido: {i['apellido']}")
+            print(f"Edad: {i['edad']}")
+            print(f"Carrera: {i['carrera']}")
+        break
+
+def validar_si_existen_estudiantes():
+    while True:
+        if len(datos_estudiantes["estudiantes"]) == 0:
+            print("No hay datos de estudiantes registrados\nVolviendo al menu principal...")
+            pausa(1.5)
+            return False
+        return True
+
+def crear_estudiante():
+    while True:
+        id_estudiante = validar_entero("Ingrese el id del estudiante: ", minimo=0)
+        if any(estudiante["id"] == id_estudiante for estudiante in datos_estudiantes["estudiantes"]):
+            print("EL id ingresado ya se encuentra registrado. Ingrese otro id.")
+            continue
+        break
+    nombre = validar_string("Ingrese el nombre del estudiante: ").strip().capitalize()
+    apellido = validar_string("Ingrese el apellido del estudiante: ").strip().capitalize()
+    edad = validar_entero("Ingrese la edad del estudiante: ", minimo=16, maximo=80)
+    carrera = validar_string("Ingrese la carrera del estudiante: ").strip().capitalize()
+
+    agregar_estudiante = {
+        "id":id_estudiante,
+        "nombre":nombre,
+        "apellido":apellido,
+        "edad":edad,
+        "carrera":carrera
+    }
+    datos_estudiantes["estudiantes"].append(agregar_estudiante)
+
+    print("\nEstudiante agregado!")
+    input("Presione enter para volver al menu principal... ")
+
+def actualizar_estudiantes():
+    while True:
+        id_estudiante = validar_entero("Ingrese el id del estudiante: ", minimo=0)
+        if id_estudiante == any(estudiante["id"] for estudiante in datos_estudiantes["estudiantes"]):
+            nuevo_nombre = validar_string("Ingrese el nuevo nombre: ")
+            nuevo_apellido = validar_string("Ingrese el nuevo apellido: ")
+            nueva_edad = validar_entero("Ingrese la nueva edad: ", minimo=16, maximo=80)
+            nueva_carrera = validar_string("Ingrese la nueva carrera: ")
+        else:
+            print("EL id ingresado no coincide con ningun estudiante.")
+            continue
+        for i in datos_estudiantes["estudiantes"]:
+            i["nombre"] = nuevo_nombre
+            i["apellido"] = nuevo_apellido
+            i["edad"] = nueva_edad
+            i["carrera"] = nueva_carrera
+        print("Estudiante actualizado!\nVolviendo al menu principal...")
+        pausa(1.5)
+        break
+
+def eliminar_estudiante():
+    while True:
+        id_estudiante = validar_entero("Ingrese el id del estudiante: ", minimo=0)
+        encontrado = False
+        for i in datos_estudiantes["estudiantes"]:
+            if i["id"] == id_estudiante:
+                datos_estudiantes["estudiantes"].remove(i)
+                print("El estudiante ha sido eliminado\nVolviendo al menu principal...")
+                pausa(1.5)
+                encontrado = True
+                break
+        if encontrado == True:
+            break
+        elif encontrado == False:
+            print("El id ingresado no coincide con ningun estudiante.")
+            continue
+            
 
 datos_estudiantes = {
     "estudiantes":[]
@@ -16,91 +131,25 @@ while True:
         continue
 
     if opcion == 1:
-        id_estudiante = validaciones.validar_id("Ingrese el id del estudiante: ")
-        nombre_estudiante = validaciones.validar_nombre("Ingrese el nombre del estudiante: ")
-        apellido_estudiante = validaciones.validar_apellido("Ingrese el apellido del estudiante: ")
-        edad_estudiante = validaciones.validar_edad("Ingrese la edad del estudiante: ")
-        carrera_estudiante = validaciones.validar_carrera("Ingrese la carrera del estudiante: ")
-        agregar_estudiante = {
-            "id":id_estudiante,
-            "nombre":nombre_estudiante,
-            "apellido":apellido_estudiante,
-            "edad":edad_estudiante,
-            "carrera":carrera_estudiante,
-        }
-        datos_estudiantes["estudiantes"].append(agregar_estudiante)
-        print(f"El estudiante {nombre_estudiante} ha sido agregado correctamente!")
-        sp(1.5)
+        crear_estudiante()
 
     if opcion == 2:
-        if len(datos_estudiantes["estudiantes"]) <=0:
-            print("No hay estudiantes registrandos\nVolviendo al menu principal...")
-            sp(1.5)
-        else:
-            for i in datos_estudiantes["estudiantes"]:
-                print(f"ID: {i["id"]}")
-                print(f"Nombre: {i["nombre"]}")
-                print(f"Apellido: {i["apellido"]}")
-                print(f"Edad: {i["edad"]}")
-                print(f"Carrera: {i["carrera"]}")
+        if not validar_si_existen_estudiantes():
+            continue
+        listar_estudiantes()
+        input("\nPresione enter para volver al menu principal...")
+    
     if opcion == 3:
-        if len(datos_estudiantes["estudiantes"]) <=0:
-            print("No hay estudiantes registrados\nVolviendo al menu principal...")
-            sp(1.5)
-        else:
-            while True:                    
-                id_estudiante = validaciones.validar_id("Ingrese el id del estudiante actualizar: ")
-                if any (estudiante["id"] == id_estudiante for estudiante in datos_estudiantes["estudiantes"]):
-                    while True:
-                        try:
-                            actualizar = int(input("1) Actualizar nombre\n2) Actualizar apellido\n3) Actualizar edad\n4) Actualizar carrera\n5) Volver al menu principal\n: "))
-                            if actualizar == 1:
-                                nuevo_nombre = validaciones.validar_nombre("Ingrese el nuevo nombre: ")
-                                for i in datos_estudiantes["estudiantes"]:
-                                    i["nombre"] = nuevo_nombre
-                                print(f"Estudiante actualizado! El nuevo nombre es: {nuevo_nombre}")
-                            elif actualizar == 2:
-                                nuevo_apellido = validaciones.validar_apellido("Ingrese el nuevo apellido: ")
-                                for i in datos_estudiantes["estudiantes"]:
-                                    i["apellido"] = nuevo_apellido
-                                print(f"Estudiante actualizado! El nuevo apellido es: {nuevo_apellido}")
-                            elif actualizar == 3:
-                                nueva_edad = validaciones.validar_edad("Ingrese la nueva edad: ")
-                                for i in datos_estudiantes["estudiantes"]:
-                                    i["edad"] = nueva_edad
-                                print(f"Estudiante actualizado! La nueva edad es: {nueva_edad}")
-                            elif actualizar == 4:
-                                nueva_carrera = validaciones.validar_carrera("Ingrese la nueva carrera: ")
-                                for i in datos_estudiantes["estudiantes"]:
-                                    i["carrera"] = nueva_carrera
-                                print(f"Estudiante actualizado! La nueva carrera es: {nueva_carrera}")
-                            elif actualizar == 5:
-                                break
-                        except ValueError:
-                            print("Debes ingresar una opcion valida. (1-5)")
-                            continue
-                if actualizar == 5:
-                    break
-                else:
-                    print("El id ingresado no coincide con ninguno.")
-                    continue
+        if not validar_si_existen_estudiantes():
+            continue
+        actualizar_estudiantes()
+    
     if opcion == 4:
-        if len(datos_estudiantes["estudiantes"]) <= 0:
-            print("No hay estudiantes registradosn\nVolviendo al menu principal")
-            sp(1.5)
-        while True:
-            estudiante_a_eliminar = validaciones.validar_id("Ingrese el id del estudiante a eliminar: ")
-
-            for estudiante in datos_estudiantes["estudiantes"]:
-                if estudiante["id"] == estudiante_a_eliminar:
-                    datos_estudiantes["estudiantes"].remove(estudiante)
-                    print(f"El estudiante {estudiante['nombre']} ha sido eliminado.")
-                    sp(1.5)
-                    break  # rompe el for
-            else:
-                print("El id ingresado no coincide con ningún estudiante.")
-                continue  # vuelve al while para pedir otro ID
-            break  # rompe el while si se eliminó correctamente
-
-
-
+        if not validar_si_existen_estudiantes():
+            continue
+        eliminar_estudiante()
+    
+    if opcion == 5:
+        print("Saliendo...")
+        pausa(1.5)
+        break

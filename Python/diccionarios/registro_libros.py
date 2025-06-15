@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/home/benjamin/Documents/duoc/Python")
-from funciones import validacion
+from funciones import clear
 from time import sleep as sp
 # Registro de libros en una biblioteca 
 
