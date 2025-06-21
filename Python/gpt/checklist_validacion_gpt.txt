@@ -1,0 +1,25 @@
+
+✅ CHECKLIST DE VALIDACIÓN - APRENDER CON IA (GPT)
+
+1. ¿Lo probé yo mismo?
+- [ ] Copié el ejemplo en mi entorno.
+- [ ] Cambié valores para ver si sigue funcionando.
+- [ ] Intenté romperlo (¿qué pasa si le pongo un dato raro?).
+
+2. ¿Puedo explicarlo con mis palabras?
+- [ ] Intenté explicarlo en voz alta o escribirlo como comentario.
+- [ ] Pude resumir qué hace cada parte del código o concepto.
+
+3. ¿Lo comparé con otra fuente?
+- [ ] Revisé documentación oficial, un video, o un blog.
+- [ ] Vi cómo se usa en Stack Overflow o en proyectos reales.
+
+4. ¿Hice una pequeña variación o aplicación propia?
+- [ ] Usé el mismo concepto en otro ejercicio o proyecto.
+- [ ] Cambié el código para resolver algo distinto.
+
+5. ¿Me encontré con dudas nuevas?
+- [ ] Algo no funcionó como esperaba y busqué por qué.
+- [ ] Surgió una pregunta que no tenía antes y la investigué.
+
+Consejo: Si haces esto 1 vez por cada tema nuevo, aprenderás mucho más rápido y con más profundidad.

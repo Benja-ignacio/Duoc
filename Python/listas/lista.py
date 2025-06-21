@@ -7,5 +7,4 @@ def test(nombre):
             return True
     return False
 
-print(test(6))
-    
+print(test(7))    
