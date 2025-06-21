@@ -1,44 +1,34 @@
 # Catalogo de videojuegos
+import re
 
-datos_videojuegos = {
-    "juegos":[]
-}
+datos_videojuegos = {"juegos":[]}
 
-def validar_entero(mensaje:str, maximo=None, minimo=None)->int:
+def validar_entero(mensaje:str, max=None, min=None)->int:
     """Validar Entero"""
     while True:
         try:
-            entero = int(input(mensaje))
+            valor = int(input(mensaje))
         except ValueError:
             print("Debes ingresar un numero entero.")
             continue
-        if  minimo is not None and maximo is not None:
-            if not minimo < entero < maximo:
-                print(f"El numero ingresado debe estar dentro del rango permitido. {(minimo,maximo)}")
+        if  min is not None and max is not None:
+            if not min <= valor <= max:
+                print(f"El numero ingresado debe estar dentro del rango permitido. {(min,max)}")
                 continue
-        if minimo is not None:
-            if not entero > minimo:
-                print(f"Debes ingresar un numero mayor o igual al minimo. (minimo = {minimo})")
-                continue
-        if maximo is not None:
-            if not entero < maximo:
-                print(f"Debes ingresar un numero menor o igual al maximo. (maximo = {maximo})")
-                continue
-        return entero
+        if min is not None and valor < min:
+            print(f"Debe ser >= al minimo. (min = {min})")
+            continue
+        if max is not None and valor > max:
+            print(f"Debe ser <= al maximo. (max = ({max})")
+            continue
+        return valor
 
-def validar_string(mensaje:str)->str:
+def validar_string(mensaje:str, formato)->str:
     """Validar string"""
     while True:
-        caracteres_permitidos = "qwertyuiopñlkjhgfdsazxcvbnm: QWERTYUIOPÑLKJHGFDSAZXCVBNM1234567890"
-        string = input(mensaje)
+        texto = input(mensaje).strip().capitalize()
+        if re.fullmatch(formato, texto):
+            return texto
+        print("Formato incorrecto!")
 
-        for i in string:
-            if i not in caracteres_permitidos:
-                print("El nombre solo debe contener letras, numeros.")
-                continue
-        if not 3 < len(string) < 64:
-            print("El nombre debe estar dentro del rango de caracteres permitidos. (3 - 64)")
-            continue
-        return string
-
-        
+test = validar_string("test: ", r"^[A-Z][a-z \d]+$")

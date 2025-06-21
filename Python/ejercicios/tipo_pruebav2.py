@@ -92,12 +92,10 @@ def buscar_estudiante(mensaje:str)->str:
         codigo_o_id = input(mensaje)
         for i in datos_estudiantes["estudiantes"]:
             if i["id"] == codigo_o_id or i["nombre"] == codigo_o_id:
-                print(f"ID: {i['id']}\nNombre: {i['nombre']}\nEdad: {i['edad']}\nGenero: {i["genero"]}\nPromedio: {i['promedio']}")
+                print(f"ID: {i['id']}\nNombre: {i['nombre']}\nEdad: {i['edad']}\nGenero: {i['genero']}\nPromedio: {i['promedio']}")
                 input("\nPresione enter para volver al menu principal... ")
                 return
-            else:
-                print("El Id/Nombre ingresado no coincide con ningun estudiante.")
-                break
+            print("El Id/Nombre ingresado no coincide con ningun estudiante.")
 def modificar_estudiante():
     while True:
         codigo = validar_codigo("Ingrese el codigo del estudiante que desea modificar: ")
@@ -111,21 +109,21 @@ def modificar_estudiante():
                 if opcion == 1:
                     nueva_edad = validar_entero("Ingrese la nueva edad del estudiante: ", minimo=12, maximo=80)
                     for i in datos_estudiantes["estudiantes"]:
-                        if i["edad"] == nueva_edad:
+                        if i["id"] == codigo:
                             i["edad"] = nueva_edad
                     print("La nueva edad se ha modificado correctamente.")
                     continue
                 elif opcion == 2:
                     nuevo_promedio = validar_promedio("Ingrese el nuevo promedio del estudiante ")
                     for i in datos_estudiantes["estudiantes"]:
-                        if i["promedio"] == nuevo_promedio:
+                        if i["id"] == codigo:
                             i["promedio"] = nuevo_promedio
                     print("El nuevo promedio se ha modificado correctamente.")
                     continue
                 elif opcion == 3:
-                    nuevo_genero = validar_genero("Ingrese el nuevo genero del estudiante: ")
+                    nuevo_genero = validar_genero()
                     for i in datos_estudiantes["estudiantes"]:
-                        if i["genero"] == nuevo_genero:
+                        if i["id"] == codigo:
                             i["genero"] = nuevo_genero
                     print("El nuevo genero se ha modificado correctamente")
                     continue
@@ -144,7 +142,7 @@ def eliminar_estudiante():
         continue
 def mostrar_estudiantes():
     for i in datos_estudiantes["estudiantes"]:
-        print(f"ID: {i['id']}\nNombre: {i['nombre']}\nEdad: {i['edad']}\nGenero: {i["genero"]}\nPromedio: {i['promedio']}")
+        print(f"ID: {i['id']}\nNombre: {i['nombre']}\nEdad: {i['edad']}\nGenero: {i['genero']}\nPromedio: {i['promedio']}")
         input("\nPresione enter para volver al menu principal... ")
 
 while True:
