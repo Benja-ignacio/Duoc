@@ -1,7 +1,54 @@
 # Catalogo de videojuegos
 import re
 from time import sleep as pausa
+from colorama import Style, Fore
 datos_videojuegos = {"juegos":[]}
+
+def guardar_datos():
+    import json, os
+    while True:
+        ruta = "."
+        opciones = validar_entero("1. Guardar como archivo.txt\n2. Guarda como archivo.json\n: ",1,2)
+        # Nombre del archivo
+        diferente_ruta = validar_entero("El archivo se guardara en la ruta actual, Desea guardar el archivo en una ruta diferente? \n1. Guardar en una ruta diferente\n2. guardar en la ruta actual\n: ",1,2)
+        if diferente_ruta == 1:
+            ruta = input("Ingrese la ruta donde el archivo se guardara: ").strip()
+
+            if os.path.isdir(ruta):
+                pass # La ruta es valida, ya existe
+            else:
+                # La ruta no existe, se pregunta si desea crearla
+                crear = validar_string("La ruta no existe. Deseas crearla? si/no: ", r"^(si|no)$").lower()
+                if crear == "si":
+                    os.makedirs(ruta, exist_ok=True)
+                else:
+                    print("Se usara la ruta actual.")
+                    ruta = "."
+        if opciones == 1:
+            nombre_archivo = validar_string("Ingrese el nombre del archivo\n: ", r"^[a-zA-Z\d][a-zA-Z\d]{1,155}")
+
+            # Contenido a guardar
+            contenido = datos_videojuegos["juegos"]
+
+            # Ruta donde se guardara el archivo
+            ruta_completa = os.path.join(ruta, nombre_archivo + ".txt") 
+
+            # Abrir el archivo en modo escritura y escribe el contenido
+            with open(ruta_completa, 'w') as file:
+                file.write(str(contenido))
+
+            print(f"El archivo {nombre_archivo} ha sido creado correctamente!")
+            return
+        
+        elif opciones == 2:
+            # Nombre del archivo json
+            nombre_archivo = validar_string("Ingrese el nombre del archivo\n: ", r"^[a-zA-Z\d][a-zA-Z\d]{1,155}")
+            # Abre el archivo y escribe como json.archivo datos_videojuegos
+            ruta_completa = os.path.join(ruta, nombre_archivo + ".json")
+            with open(ruta_completa, "w") as json_file:
+                json.dump(datos_videojuegos["juegos"], json_file)
+            print("Archivo Json creado correctamente!")
+            return
 
 def limpiar():
     import os
@@ -86,10 +133,10 @@ def mostrar_datos():
         return
     limpiar()
     for i in datos_videojuegos["juegos"]:
-        print(f"ID: {i['id']}")
-        print(f"Nombre: {i['nombre']}")
-        print(f"Plataforma: {i['plataforma']}")
-        print(f"Año: {i['anio']}\n")
+        print(Fore.YELLOW,f"ID: {i['id']}",Style.RESET_ALL)
+        print(Fore.BLUE,f"Nombre: {i['nombre']}",Style.RESET_ALL)
+        print(Fore.RED,f"Plataforma: {i['plataforma']}",Style.RESET_ALL)
+        print(Fore.CYAN,f"Año: {i['anio']}\n", Style.RESET_ALL)
     input("\nPresione enter para volver al menu: ")
 
 def buscar_juego()->str:
@@ -151,9 +198,10 @@ def modificar_juego():
         break
 while True:
     limpiar()
-    print("  ***Administrador de juegos***\n")
-    opciones = validar_entero("1. Agregar Juegos\n2. Listar los juegos\n3. Buscar por nombre\n4. Eliminar por id\n5. Modificar juego\n6. Salir\n: ", 1,6)
+    print(Fore.RED+ "  ***Administrador de juegos***\n", Style.RESET_ALL)
+    opciones = validar_entero("1. Agregar Juegos\n2. Listar los juegos\n3. Buscar por nombre\n4. Eliminar por id\n5. Modificar juego\n6. Salir y guardar archivos\n7. Salir sin guardar\n: ", 1,7)
     if opciones == 1:
+        limpiar()
         agregar_juego()
     elif opciones == 2:
         limpiar()
@@ -168,5 +216,11 @@ while True:
         limpiar()
         modificar_juego()
     elif opciones == 6:
+        limpiar()
+        if not hay_datos():
+            continue
+        guardar_datos()
+        input("\nPresione enter para salir: ")
         break
-
+    elif opciones == 7:
+        break

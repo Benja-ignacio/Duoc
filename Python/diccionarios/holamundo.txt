@@ -1,0 +1,1 @@
+[{'id': 'abc123', 'nombre': 'Bleach', 'plataforma': 'Steam', 'anio': 2020}]
