@@ -10,7 +10,13 @@ datos_hotel = {
             "tipo":"individual", # doble, suite
             "dias":1 # 1 minimo
         }
-    ]
+    ],
+    "precios":
+    {
+        "suite":120,
+        "doble":80,
+        "individual":50
+    }
 }
 # $ por dia
 habitaciones = {
