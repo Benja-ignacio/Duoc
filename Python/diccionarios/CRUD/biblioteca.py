@@ -30,15 +30,11 @@ biblioteca = {
 def menu_principal():
     while True:
         print("*** SISTEMA DE BIBLIOTECA ***\n")
-        try:
-            opciones = int(input("1. Registrar libro\n2. Registrar usuario\n3. Prestar libro\n4. Devolver libro\n5. Ver libros prestados y disponibles\n6. salir\n: "))
-        except ValueError:
-            print("Debes ingresar una opcion valida. 1-6")
-            continue
+        opciones = pedir_entero("1. Registrar libro\n2. Registrar usuario\n3. Prestar libro\n4. Devolver libro\n5. Ver libros prestados\n6. Ver libros disponibles\n7. salir\n: ",1, 7)
         if opciones == 1:
-            print("opc1")
+            registrar_libro()
         elif opciones == 2:
-            print("opc1")
+            registrar_usuario()
         elif opciones == 3:
             print("opc1")
         elif opciones == 4:
@@ -46,11 +42,35 @@ def menu_principal():
         elif opciones == 5:
             print("opc1")
         elif opciones == 6:
+            print("opc2")
+        elif opciones == 7:
             return
         else:
             print("Debes ingresar una opcion valida. (1-6)")
             continue
     
+def pedir_entero(mensaje, minimo=None, maximo=None):
+    while True:
+        try:
+            entero = int(input(mensaje))
+        except ValueError:
+            print("Debes ingresar numeros enteros.")
+            continue
+        
+        if minimo is not None and maximo is not None:
+            if not minimo <= entero <= maximo:
+                print(f"El numero debe estar dentro del rango de {minimo, maximo}.")
+                continue
+        elif minimo is not None:
+            if entero < minimo:
+                print(f"EL numero debe ser mayor o igual a {minimo}.")
+                continue
+        elif maximo is not None:
+            if entero > maximo:
+                print(f"EL numero debe ser menor o igual a {maximo}.")
+                continue
+        return entero
+
 def pedir_string(mensaje, formato,error:str):
     while True:
         texto = input(mensaje).strip()
@@ -79,7 +99,9 @@ def validar_id_libro():
     while True:
         id_libro = pedir_id()
         if any(i['id'] == id_libro for i in biblioteca["libros"]):
-            print("El id ingresado se encuentra en uso. Intente de nuevo.")
+            limpiar()
+            print(Fore.LIGHTWHITE_EX + "El id ingresado se encuentra en uso. Intente de nuevo.", Style.RESET_ALL)
+            pausa(1.5)
             continue
         return id_libro
 
@@ -87,7 +109,9 @@ def validar_id_usuario():
     while True:
         id_usuario = pedir_id()
         if any(i['id'] == id_usuario for i in biblioteca["usuarios"]):
+            limpiar()
             print("El id ingresado se encuentra en uso. Intente de nuevo.")
+            pausa(1.5)
             continue
         return id_usuario
 
@@ -121,6 +145,26 @@ def registrar_libro():
         input("\nPresione enter para volver al menu principal: ")
         return
 
+def registrar_usuario():
+    while True:
+        nuevo_usuario = {
+            "id":validar_id_usuario(),
+            "nombre":validar_nombre_usuario()
+        }
+        biblioteca["usuarios"].append(nuevo_usuario)
+        limpiar()
+        input("Usuario agregado correctamente!\nPresione enter para volver al menu principal: ")
+
+
+def validar_nombre_usuario():
+    while True:
+        nombre_usuario = pedir_string("Ingrese el nombre de usuario: ", r"[a-zA-Z ]{3,50}", "Solo se permiten letras y debe tener minimo 3 caracteres.")
+        if any(i['nombre'] == nombre_usuario for i in biblioteca["usuarios"]):
+            limpiar()
+            print(Fore.RED + "El nombre ingresado se encuentra en uso.", Style.RESET_ALL)
+            pausa(1.5)
+            continue
+        return nombre_usuario     
 
 def hay_datos():
     limpiar()
@@ -129,3 +173,24 @@ def hay_datos():
         pausa(1.5)
         return False
     return True
+
+def buscar_libro(mensaje):
+    while True:
+        libro_a_buscar = input(mensaje)
+
+        for i in biblioteca["libros"]:
+            if i['id'] == libro_a_buscar:
+                return libro_a_buscar
+        print("No se encontro libro con el ID ingresado.")
+        continue
+
+def buscar_usuario(mensaje):
+    while True:
+        usuario_a_buscar = input(mensaje)
+
+        for i in biblioteca["usuarios"]:
+            if i['id'] == usuario_a_buscar:
+                return True
+        print("El ID ingresado no coincide con ninguno.")
+        
+buscar_usuario("test: ")
