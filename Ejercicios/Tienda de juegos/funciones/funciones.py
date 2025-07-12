@@ -1,3 +1,7 @@
+# Caracteres permitidos ID 
+letras = "QWERTYUIOPASDFGHJKLÑZXCVBNM"
+numeros = "1234567890"
+caracteres_validos = "QWERTYUIOPASDFGHJKLÑZXCVBNM1234567890"
 # Validaciones 
 
 
@@ -29,13 +33,10 @@ def menu_principal(videojuegos):
 def buscar_juego_por_nombre(videojuegos):
     while True:
         userinput = input("Ingrese el nombre del juego: ")
-        for i in videojuegos['juegos']:
-            if videojuegos['juegos'][i][0].lower() == userinput.lower():
-                juego_encontrado = videojuegos['juegos'][i]
-                juego_encontrado.insert(0,i)
-                print(juego_encontrado)
-                input('\nPresione enter para volver al menu principal: ')
-                return
+        for id in videojuegos['juegos']:
+            nombre = videojuegos['juegos'][id][0]
+            if  nombre.lower() == userinput.lower():
+                return True
         print("El nombre ingresado no existe.")
         continue
 
@@ -76,7 +77,30 @@ def pedir_entero(mensaje, minimo=None, maximo=None):
                 print(f"El numero debe ser igual o mayor a {minimo}")
                 continue
         return entero
+    
+def stock_disponible(videojuegos):
+    while True:
+        opcion = pedir_entero("1. Mostrar todos los stock disponibles.\n2. Buscar stock por nombre\n: ", 1,2)
+        if opcion == 1:
+            for id in videojuegos['juegos']:
+                nombre = videojuegos['juegos'][id][0]
+                stock = videojuegos['stock'][id][1]
+                print(f"ID: {id} Nombre: {nombre}, Stock: {stock}")
+            return
+        elif opcion == 2:
+            buscar_juego_por_nombre(videojuegos)
 
+def pedir_id(videojuegos):
+    while True:
+        id = input("Ingrese el id: ")
+        tiene_letra = any(c in letras for c in id)
+        tiene_numero = any(c in numeros for c in id)
+        es_valido = all(c in caracteres_validos for c in id)
 
-
+        if not len(id) == 6:
+            print("EL id debe tener 6 caracteres.")
+            continue
+        if tiene_letra and tiene_numero and es_valido:
+            return id 
+        print("EL ID debe tener solo letras mayusculas y al menos un numero.")
 
