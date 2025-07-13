@@ -93,14 +93,20 @@ def stock_disponible(videojuegos):
 def pedir_id(videojuegos):
     while True:
         id = input("Ingrese el id: ")
-        tiene_letra = any(c in letras for c in id)
         tiene_numero = any(c in numeros for c in id)
         es_valido = all(c in caracteres_validos for c in id)
 
         if not len(id) == 6:
             print("EL id debe tener 6 caracteres.")
             continue
-        if tiene_letra and tiene_numero and es_valido:
+        if tiene_numero and es_valido:
             return id 
         print("EL ID debe tener solo letras mayusculas y al menos un numero.")
 
+def validar_id(videojuegos):
+    while True:
+        id = pedir_id(videojuegos)
+        if any(juego[0] == id for juego in videojuegos['juegos']):
+            print("El id ingresado se encuentra en uso.")
+            continue
+        return id

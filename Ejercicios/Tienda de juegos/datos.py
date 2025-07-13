@@ -36,4 +36,6 @@ videojuegos = {
 # Año de lanzamiento: {juegos[6]}
 # Publicador: {juegos[7]}
 # """)
-                                
+                
+for i in videojuegos['juegos']:
+    print(i)
