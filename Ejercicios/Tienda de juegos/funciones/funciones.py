@@ -4,9 +4,22 @@ numeros = "1234567890"
 caracteres_validos = "QWERTYUIOPASDFGHJKLÑZXCVBNM1234567890"
 # Validaciones 
 
+def existe_juego_id(videojuegos, id_juego):
+    while True:
+        if id_juego in videojuegos['juegos']:
+            return True
+        return False
 
+def validar_entero(mensaje):
+    while True:
+        try:
+            entero = int(input(mensaje))
+        except ValueError:
+            print("Debes ingresar un numero entero.")
+            continue
+        return entero
+# Funciones
 
-# funciones
 def menu_principal(videojuegos):
     while True:
         print(" *** TIENDA DE VIDEOJUEGOS ***")
@@ -80,7 +93,7 @@ def pedir_entero(mensaje, minimo=None, maximo=None):
     
 def stock_disponible(videojuegos):
     while True:
-        opcion = pedir_entero("1. Mostrar todos los stock disponibles.\n2. Buscar stock por nombre\n: ", 1,2)
+        opcion = pedir_entero("1. Mostrar todos los stock disponibles.\n2. Buscar stock por ID\n: ", 1,2)
         if opcion == 1:
             for id in videojuegos['juegos']:
                 nombre = videojuegos['juegos'][id][0]
@@ -88,25 +101,58 @@ def stock_disponible(videojuegos):
                 print(f"ID: {id} Nombre: {nombre}, Stock: {stock}")
             return
         elif opcion == 2:
-            buscar_juego_por_nombre(videojuegos)
+            while True:
+                id_juego = input("Ingrese el ID del juego: ")
+                if existe_juego_id(videojuegos, id_juego):
+                    for id in videojuegos['juegos']:
+                        nombre = videojuegos['juegos'][id][0]
+                        stock = videojuegos['juegos'][id][1]
+                        print(f"\nNombre: {nombre} Stock: {stock}")
+                        input("\nPresione enter para volver al menu: ")
+                        return
+                print("EL id ingresado no existe.")
+
+            
 
 def pedir_id(videojuegos):
     while True:
-        id = input("Ingrese el id: ")
-        tiene_numero = any(c in numeros for c in id)
-        es_valido = all(c in caracteres_validos for c in id)
+        id_juego = input("Ingrese el id: ")
+        tiene_numero = any(c in numeros for c in id_juego)
+        tiene_letra = any(c in letras for c in id_juego)
+        es_valido = all(c in caracteres_validos for c in id_juego)
 
-        if not len(id) == 6:
+        if not len(id_juego) == 6:
             print("EL id debe tener 6 caracteres.")
             continue
-        if tiene_numero and es_valido:
-            return id 
-        print("EL ID debe tener solo letras mayusculas y al menos un numero.")
-
-def validar_id(videojuegos):
-    while True:
-        id = pedir_id(videojuegos)
-        if any(juego[0] == id for juego in videojuegos['juegos']):
-            print("El id ingresado se encuentra en uso.")
+        if not es_valido or not tiene_numero or not tiene_letra:
+            print("EL ID debe al menos una letra mayuscula y un numero.")
             continue
-        return id
+        if existe_juego_id(videojuegos, id_juego):
+            print("El ID esta en uso.")
+            continue
+        if tiene_numero and tiene_letra and es_valido and not existe_juego_id(videojuegos, id_juego):
+            return id_juego
+
+def disminuir_stock(videojuegos):
+    while True:
+        id_juego = input("ingrese el ID: ")
+        if not existe_juego_id(videojuegos, id_juego):
+            print("El id no existe.")
+            continue
+        if existe_juego_id(videojuegos, id_juego):
+            for id in videojuegos["juegos"]:
+                nombre = videojuegos['juegos'][id][0]
+                stock = videojuegos['stock'][id][1]
+        print(f"ID : {nombre} Stock: {stock}")
+        while True:
+            disminuir_stock = validar_entero("Cantidad a disminuir: ")
+            if disminuir_stock > stock:
+                print("No hay stock suficiente.")
+                continue
+            elif disminuir_stock <= 0:
+                print("No puedes elegir un numero negativo o 0.")
+                continue
+            else:
+                nuevo_stock = stock - disminuir_stock
+                print(f"EL nuevo stock es: {nuevo_stock} unidades.")
+                return
