@@ -1,0 +1,46 @@
+*** EJERCICIO INGRESO FECHA CONTRATACION DOCENTE CON VALIDADOR DE LA CLASE MAIN DEL PORYECTO ***//
+
+// En Registroinstituto, cambia estos encabezados:
+
+// antes:
+private String leerNoVacio(String prompt) { ... }
+// después:
+public String leerNoVacio(String prompt) { ... }
+
+// antes:
+private LocalDate leerFechaNoFutura(String prompt) { ... }
+// después:
+public LocalDate leerFechaNoFutura(String prompt) { ... }
+
+***AHORA CREA LA CLASE ISLA "IslaDocente_ValidaFechaConRegistro" Y COPIA ESTE CODIGO, LUEGO EJECUTA Y COMPRUEBA
+
+package registroinstituto.islas;
+
+import java.time.LocalDate;
+import registroinstituto.Registroinstituto;
+import registroinstituto.Docente;
+import registroinstituto.Sede; // opcional, usaremos null para simplificar
+
+public class IslaDocente_ValidaFechaConRegistro {
+
+    public static void main(String[] args) {
+        // 1) Creamos un "helper" del proyecto para reutilizar sus métodos de lectura/validación
+        Registroinstituto io = new Registroinstituto();
+
+        // 2) Leemos datos del docente usando los métodos del propio proyecto (no vacíos)
+        String rutDocente = io.leerNoVacio("RUT del docente:");
+        String numeroDocente = io.leerNoVacio("Numero de docente:");
+        String nombreDocente = io.leerNoVacio("Nombre del docente (no vacio):");
+
+        // 3) Leemos y validamos la fecha con la rutina EXISTENTE (no posterior a hoy)
+        LocalDate fechaIngreso = io.leerFechaNoFutura("Fecha de ingreso (dd-MM-yyyy, no posterior a hoy):");
+
+        // 4) Creamos el Docente (sede = null para esta isla)
+        Sede sede = null;
+        Docente docente = new Docente(rutDocente, numeroDocente, nombreDocente, fechaIngreso, sede);
+
+        // 5) Mostramos el resultado
+        System.out.println("=== DOCENTE REGISTRADO ===");
+        System.out.println(docente.toString());
+    }
+}

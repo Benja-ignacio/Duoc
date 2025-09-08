@@ -1,9 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package farmacia;
-import java.time.LocalDate;
+
 
 /**
  *
@@ -12,16 +8,15 @@ import java.time.LocalDate;
 public class Medicamento {
     
     // Atributos
-    private String codigo, nombre, tipo;
+    private String codigo, nombre, tipo, fecha;
     private int precio, stock;
-    private LocalDate fecha;
     
     // constructores 
 
     public Medicamento() {
     }
 
-    public Medicamento(String codigo, String nombre, String tipo, int precio, int stock, LocalDate fecha) {
+    public Medicamento(String codigo, String nombre, String tipo, int precio, int stock, String fecha) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -52,7 +47,7 @@ public class Medicamento {
         return stock;
     }
 
-    public LocalDate getFecha() {
+    public String getFecha() {
         return fecha;
     }
     
@@ -78,7 +73,7 @@ public class Medicamento {
         this.stock = stock;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
