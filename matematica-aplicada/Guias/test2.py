@@ -1,16 +1,9 @@
-datos = []
+def latencia(lat):
+    latencia_real = lat * (1 + 0.20)
+    return latencia_real
 
-def cantidad_datos(segundos):
-    megabits_por_segundo = 100
-    datos = segundos * megabits_por_segundo
-    return datos
+print(latencia(200))
 
+print(latencia(149))
 
-contador = 0
-incremento = 100
-
-while contador < 1001:
-    resultado = cantidad_datos(contador)
-    datos.append(resultado)
-    print(datos)    
-    contador += 100
+print(latencia(74))
